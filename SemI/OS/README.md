@@ -60,48 +60,48 @@ Handling methods.
 
 ## Unit III
 
-Memory Management:
-Concepts
-single user memory management
+- Memory Management:
+    - Concepts
+    - single user memory management
 
-Partition memory allocation:
-Paging
-Segmentation & segmentation with paging
+- Partition memory allocation:
+    - Paging
+    - Segmentation & segmentation with paging
 
-Virtual memory management:
-Concept
-demand paging
-process creation
-page replacement
-allocation of frames and thrashing.
+- Virtual memory management:
+    - Concept
+    - demand paging
+    - process creation
+    - page replacement
+    - allocation of frames and thrashing.
 
 ## Unit IV
 
-File Management:
-File concepts
-access methods
-directory structure
-file system mounting
-sharing and protection of files
+- File Management:
+    - File concepts
+    - access methods
+    - directory structure
+    - file system mounting
+    - sharing and protection of files
 
-File system structure and implementation
-allocation methods
-free space management
-reliability of file system
-Unix file system.
+- File system structure and implementation
+- allocation methods
+- free space management
+- reliability of file system
+- Unix file system.
 
 ## Unit V
 
-Device Management: 
-Goals of input/output software design
-Structure of device hardware and software
+- Device Management: 
+    - Goals of input/output software design
+    - Structure of device hardware and software
 
-Layers of I/O software
-Structure of device drivers
-Disk driver
-Disk arm scheduling algorithms
-Terminal driver
-Clock driver Etc.
+- Layers of I/O software
+- Structure of device drivers
+- Disk driver
+- Disk arm scheduling algorithms
+- Terminal driver
+- Clock driver Etc.
 
 - - -
 
