@@ -4,59 +4,59 @@ Operating Systems
 
 ## Unit I
 
-Introduction:
-Evolution of operating systems
-operating system concepts
-Activities, functions and services of operating system
+- Introduction:
+    - Evolution of operating systems
+    - operating system concepts
+    - Activities, functions and services of operating system
 
-Computer Systems:
-Mainframe
-Desktop
-Multiprocessors
-Distributed
-Clustered
-Real time and Hand held systems
+- Computer Systems:
+    - Mainframe
+    - Desktop
+    - Multiprocessors
+    - Distributed
+    - Clustered
+    - Real time and Hand held systems
 
-Computer System Operations
-Storage hierarchy
-Hardware protection
-System calls
-System structures
+- Computer System Operations
+- Storage hierarchy
+- Hardware protection
+- System calls
+- System structures
 
-Process Management: 
-Process concepts
-Process scheduling
-Operation on processes
+- Process Management: 
+    - Process concepts
+    - Process scheduling
+    - Operation on processes
 
 ## Unit II
 
-Cooperating processes
-Inter-process communication
+- Cooperating processes
+- Inter-process communication
 
-Threads:
-Multithreading models
-threading issues
-thread examples
+- Threads:
+    - Multithreading models
+    - threading issues
+    - thread examples
 
-CPU Scheduling:
-Concepts
-scheduling criteria
-scheduling algorithms
-algorithm evaluation
+- CPU Scheduling:
+    - Concepts
+    - scheduling criteria
+    - scheduling algorithms
+    - algorithm evaluation
 
-Process synchronization:
-Critical section problem
-Mutual exclusion and synchronization
+- Process synchronization:
+    - Critical section problem
+    - Mutual exclusion and synchronization
 
-Techniques of inter process:
-Synchronization hardware
-Semaphore
-Classical problems of synchronization
-Critical regions and monitors
+- Techniques of inter process:
+    - Synchronization hardware
+    - Semaphore
+    - Classical problems of synchronization
+    - Critical regions and monitors
 
-Deadlock:
-Characterization
-Handling methods.
+- Deadlock:
+    - Characterization
+    - Handling methods.
 
 ## Unit III
 
