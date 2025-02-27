@@ -132,12 +132,10 @@ Foundational knowledge required for optimization of storage and access of inform
 
 ## Text Book(s)
 
-1.Data Structures using C by A. M. Tenenbaum, Langsam, Moshe J. Augentem, PHI Pub, 6th Edition.
-
-2.How to Program C++ by Paul Deitel , Harvey Deitel, Prentice Hall; 8 edition. 
+1. Data Structures using C by A. M. Tenenbaum, Langsam, Moshe J. Augentem, PHI Pub, 6th Edition.
+2. How to Program C++ by Paul Deitel , Harvey Deitel, Prentice Hall; 8 edition. 
 
 ## Reference Material(s)
 
-1.Theory & Problems of Data Structures by Jr. Symour Lipschetz, Schaum'soutline by TMH 2006,Special Indian Edition.
-
-2.Data Structures and Algorithms by A.V. Aho, J.E. Hopcroft and T.D. Ullman, Original edition, Addison-Wesley, 1999, Low Priced Edition.
+1. Theory & Problems of Data Structures by Jr. Symour Lipschetz, Schaum'soutline by TMH 2006,Special Indian Edition.
+2. Data Structures and Algorithms by A.V. Aho, J.E. Hopcroft and T.D. Ullman, Original edition, Addison-Wesley, 1999, Low Priced Edition.
