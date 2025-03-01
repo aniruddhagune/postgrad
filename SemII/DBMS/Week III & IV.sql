@@ -334,7 +334,20 @@ WHERE cname="Sunil";
 
 ---- 9. List the borrowers having branch city same as that of Sunil. 
 
+SELECT l.cname
+FROM borrow l
+JOIN branch b ON b.bname = l.bname
+    
+INTERSECT
 
+SELECT l.cname
+FROM borrow l
+JOIN branch b ON b.bname = l.bname
+WHERE b.city
+IN (SELECT b2.city
+    FROM branch b2
+    JOIN borrow l2 ON l2.bname=b2.bname
+    WHERE l2.cname = "Sunil");
 
 
 ---- 10. List the customer having deposit greater than 1000 and loan less than 10000. 
