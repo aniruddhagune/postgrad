@@ -33,7 +33,7 @@ INSERT INTO Branch VALUES
 ("Ajni", "Nagpur"),
 ("Karolbagh", "Delhi"),
 ("Chandani", "Delhi"),
-("Dharmpheth", "Nagpur"),
+("Dharampeth", "Nagpur"),
 ("M.G Road", "Banglore"),
 ("Andheri", "Bombay"),
 ("Virar", "Bombay"),
