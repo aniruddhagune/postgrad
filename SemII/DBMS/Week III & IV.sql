@@ -361,50 +361,208 @@ WHERE b.city = b_sunil.city;
 
 ---- 10. List the customer having deposit greater than 1000 and loan less than 10000. 
 
+SELECT d.cname
+FROM deposit d
+WHERE amount > 1000
 
+INTERSECT
 
+SELECT l.cname
+FROM borrow l
+WHERE amount < 10000;
 
 ---- 11. List the borrowers having branch city same as that of Sunil. 
 
-
+-- Question 9.
 
 ---- 12. List the cities of depositors having branch VRCE.
 
+-- This is rather unintuitive, and unnecessarily long.
+SELECT city FROM customer 
 
+INTERSECT
+
+SELECT c.city
+FROM customer c
+JOIN deposit d ON d.cname = c.cname
+WHERE d.bname = 'VRCE';
+
+-- Far more efficient.
+SELECT c.city
+FROM customer c
+JOIN deposit d ON d.cname=c.cname
+WHERE d.bname="VRCE";
 
 ---- 13. List the depositors having the same living city as that of Sunil and the same branch city as that of Anil. 
 
+SELECT c.cname
+FROM customer c
+JOIN deposit d ON d.cname = c.cname
+WHERE c.city = (SELECT city FROM customer WHERE cname = "Sunil")
 
+INTERSECT
+
+SELECT d.cname
+FROM deposit d
+JOIN branch b ON b.bname = d.bname
+WHERE b.city = (SELECT city FROM branch b JOIN deposit d ON b.bname = d.bname WHERE d.cname = "Anil");
 
 ---- 14. List the depositors having amount less than 8000 and living in the same city as Ms. Shivani. 
 
+SELECT d.cname
+FROM deposit d
+WHERE amount < 8000
 
+INTERSECT
+
+SELECT d.cname
+FROM deposit d
+JOIN customer c ON c.cname=d.cname
+WHERE c.city = (SELECT city FROM customer WHERE cname="Shivani");
 
 ---- 15. List all the customers who are both depositors and borrowers and living in the same city as Anil. 
 
+SELECT d.cname
+FROM deposit d
 
+INTERSECT
+
+SELECT l.cname
+FROM borrow l
+
+INTERSECT
+
+SELECT c.cname
+FROM customer c
+WHERE c.city IN (SELECT city FROM customer WHERE cname="Anil");
 
 ---- 16. List all the cities where branches of Anil and Sunil are located. 
 
+SELECT b.city
+FROM branch b
+JOIN deposit d ON d.bname = b.bname
+WHERE b.bname = (SELECT bname FROM deposit WHERE cname="Anil")
 
+INTERSECT
+
+SELECT b.city
+FROM branch b
+JOIN deposit d ON d.bname = b.bname
+WHERE b.bname = (SELECT bname FROM deposit WHERE cname="Sunil");
 
 ---- 17. List all the customer names and the amount for depositors living in the city where either Anil or Sunil is living. 
 
+-- Using UNION
+SELECT c.cname, d.amount
+FROM customer c
+JOIN deposit d ON d.cname = c.cname
+WHERE c.city = (SELECT city FROM customer WHERE cname = "Anil")
 
+UNION
+
+SELECT c.cname, d.amount
+FROM customer c
+JOIN deposit d ON d.cname = c.cname
+WHERE c.city = (SELECT city FROM customer WHERE cname = "Sunil");
+
+-- Using OR like a sane person:
+SELECT c.cname, d.amount
+FROM customer c
+JOIN deposit d ON d.cname = c.cname
+WHERE c.city = (SELECT city FROM customer WHERE cname = "Anil")
+   OR c.city = (SELECT city FROM customer WHERE cname = "Sunil");
 
 ---- 18. List the amount for the depositors living in the city where Anil is living. 
 
-
+SELECT c.cname, d.amount
+FROM customer c
+JOIN deposit d ON d.cname = c.cname
+WHERE c.city = (SELECT city FROM customer WHERE cname = "Anil");
 
 ---- 19. List the cities which are either branch city of Anil or living city of Sunil. 
 
+SELECT b.city
+FROM branch b
+JOIN deposit d ON d.bname = b.bname
+WHERE d.cname = "Anil"
 
+UNION
+
+SELECT city
+FROM customer 
+WHERE cname = "Sunil";
 
 ---- 20. List the customers who are borrowers and depositors and having living city Bombay and branch city same as that of Sandip. 
 
+-- Intersects
+
+SELECT cname
+FROM deposit
+
+INTERSECT
+
+SELECT cname
+FROM borrow
+
+INTERSECT
+
+SELECT cname
+FROM customer
+WHERE city = "Bombay"
+
+INTERSECT
+
+SELECT d.cname
+FROM deposit d
+JOIN branch b ON b.bname = d.bname
+WHERE b.city = (SELECT city FROM branch JOIN deposit ON deposit.bname = branch.bname WHERE deposit.cname = "Sandip");
+
+-- Self Joins
+
+SELECT DISTINCT d.cname
+FROM deposit d
+
+JOIN borrow l ON l.cname = d.cname
+JOIN customer c ON c.cname = d.cname
+JOIN branch b ON b.bname = d.bname
+
+JOIN deposit d_sandip ON d_sandip.cname = "Sandip"
+JOIN branch b_sandip ON b_sandip.bname = d_sandip.bname
+
+WHERE c.city = "Bombay"
+AND b.city = b_sandip.city;
+
+-- Subquery
+
+SELECT DISTINCT d.cname
+FROM deposit d
+JOIN borrow l ON l.cname = d.cname
+JOIN customer c ON c.cname = d.cname
+JOIN branch b ON b.bname = d.bname
+
+WHERE c.city = 'Bombay'
+
+AND b.city =
+(SELECT city
+FROM branch b2 
+JOIN deposit d2 ON d2.bname = b2.bname
+WHERE d2.cname = 'Sandip');
 
 
 ---- 21. List the customers who are both borrowers and depositors and having the same branch city as that of Anil.
 
+SELECT cname
+FROM deposit
 
+INTERSECT
+
+SELECT cname
+FROM borrow
+
+INTERSECT
+
+SELECT cname
+FROM deposit d
+JOIN branch b ON b.bname = d.bname
+WHERE b.city = (SELECT b.city FROM branch b JOIN deposit d ON d.bname = b.bname WHERE d.cname = "Anil");
 
