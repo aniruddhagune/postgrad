@@ -1,10 +1,4 @@
 ## Overview
-Notes and files related to subjects in the second semester of my postgraduate.
+Notes and files related to **Internet Web Technology**. Or Java, more precisely.
 
-## Subjects
-
-- Internet Web Technology
-- Database Management System
-- Design & Analysis of Algorithms
-- Software Engineering
-- Computer Networks
+java version "1.8.0_231"
