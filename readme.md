@@ -1,10 +1,3 @@
-## Overview
-Notes and files related to subjects in the second semester of my postgraduate.
+# Overview
 
-## Subjects
-
-- Internet Web Technology
-- Database Management System
-- Design & Analysis of Algorithms
-- Software Engineering
-- Computer Networks
+Relevant code, and notes from my postgraduate degree.
