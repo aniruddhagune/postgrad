@@ -266,6 +266,7 @@ db.students.insertMany([
 ]);
 
 //// Query
+
 // Query: findOne() - returns only one object.
 db.students.findOne({ name: "Alice" });
 
@@ -273,6 +274,7 @@ db.students.findOne({ name: "Alice" });
 db.students.find({ department: "Computer Science" });
 
 //// Update
+
 // Update: updateOne()
 db.students.updateOne(
   { name: "Alice" },
@@ -302,6 +304,7 @@ db.students.replaceOne(
 );
 
 //// Delete
+
 // deleteOne()
 db.students.deleteOne({ name: "Tom" });
 
@@ -309,20 +312,13 @@ db.students.deleteOne({ name: "Tom" });
 db.students.deleteMany({ cgpa: { $lt: 6.5 } });
 
 
-//// Projection
+//// Projection - Selecting specific data rather 
 
+// Projection with specific fields inlcuded.
+db.students.find({}, { _id: 0, name: 1, cgpa: 1 });
 
+// Projection with specific fields excluded, and returning every other one.
+db.students.find({}, { _id: 0, semester: 0, cgpa: 0});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Projection with filter.
+db.students.find({ department: "Computer Science" }, { name: 1, semester: 1 });
