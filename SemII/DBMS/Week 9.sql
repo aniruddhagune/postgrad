@@ -91,9 +91,6 @@ END;
 
 ---- 6. Create package having one procedure to add two numbers and one function to subtract two numbers.
 
-- **Function**: Like a vending machine. Input → Output.
-- **Procedure**: Like a shopkeeper. You ask for something, and they may do 5 different things to deliver it — even if you don’t get a return value directly.
-
 -- Package Declaration
 CREATE OR REPLACE PACKAGE question_six AS
    PROCEDURE add_numbers(a IN NUMBER, b IN NUMBER);
@@ -132,8 +129,66 @@ END;
 
 ---- 7. Demonstrate cursor.
 
+DECLARE
+  CURSOR low_salary_cursor IS
+    SELECT emp_id, salary FROM employee WHERE salary < 25000;
 
+  v_id     employee.emp_id%TYPE;
+  v_salary employee.salary%TYPE;
+
+BEGIN
+  OPEN low_salary_cursor; -- Creating result set in memory; make space.
+
+  LOOP
+    FETCH low_salary_cursor INTO v_id, v_salary; -- Fetch one row at a time into variables.
+    EXIT WHEN low_salary_cursor%NOTFOUND; -- When to end; when there's none left.
+
+    -- Give bonus to the struggling.
+    UPDATE employee
+    SET salary = v_salary + 1000
+    WHERE emp_id = v_id;
+	
+    DBMS_OUTPUT.PUT_LINE('Updated Employee ID ' || v_id || ' with new salary: ' || (v_salary + 1000));
+  END LOOP;
+
+  CLOSE low_salary_cursor;
+END;
+/
 
 ---- 8. Demonstrate trigger.
 
+CREATE OR REPLACE TRIGGER trg_before_insert_emp
 
+BEFORE INSERT ON emp
+FOR EACH ROW
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Inserting employee: ' || :NEW.ename);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_after_insert_emp
+
+AFTER INSERT ON emp
+FOR EACH ROW
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('Inserted employee: ' || :NEW.ename);
+END;
+/
+
+CREATE OR REPLACE TRIGGER trigger_created_at
+
+BEFORE INSERT ON emp
+FOR EACH ROW
+BEGIN
+  :NEW.created_at := SYSDATE;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trigger_created_at
+
+BEFORE UPDATE ON emp
+FOR EACH ROW
+BEGIN
+  :NEW.modified_at := SYSDATE;
+END;
+/
