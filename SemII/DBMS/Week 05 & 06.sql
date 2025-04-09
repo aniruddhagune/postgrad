@@ -156,11 +156,50 @@ WHERE d.bname IN (
     HAVING AVG(amount) > 1000
 );
 
+---- 4. List the name of customers having maximum deposit in respective branches.
+
+SELECT d.bname, d.cname, d.amount FROM deposit d
+GROUP BY d.bname HAVING MAX(d.amount);
+
+---- 5. List the name of customers having maximum deposit from all the customers living in Nagpur.
+
+SELECT d.bname, d.cname, d.amount
+FROM deposit d
+
+JOIN (
+    SELECT bname, MAX(amount) AS max_amount
+    FROM deposit
+    GROUP BY bname
+) AS max_deposits
+
+ON d.bname = max_deposits.bname 
+AND d.amount = max_deposits.max_amount;
 
 
+-- So, you can get the branch max amounts from the subquery alone
+-- but the reason we use JOIN is because we need names of the customers that have the max deposit amounts
+-- and GROUP BY needs every column to be in GROUP BY
+-- or be inside an aggregate function.
 
+---- 6. List the name of branch having highest number of depositors.
 
+-- Shows only 1 entry.
+SELECT bname, COUNT(DISTINCT cname) AS num_depositors
+FROM deposit
+GROUP BY bname
+ORDER BY num_depositors DESC
+LIMIT 1;
 
+-- Window Functions
+
+WITH ranked_branches AS (
+  SELECT bname, COUNT(DISTINCT cname) AS num_depositors,
+         RANK() OVER (ORDER BY COUNT(DISTINCT cname) DESC) AS rank
+  FROM deposit
+  GROUP BY bname
+)
+SELECT bname FROM ranked_branches
+WHERE rank = 1;
 
 
 
