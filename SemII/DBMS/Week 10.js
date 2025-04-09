@@ -225,7 +225,101 @@ db.students.find({
 });
 
 
-// 11. Execute the Commands of MongoDB and operations in MongoDB : Insert, Query, Update, Delete and Projection. (Note: use any collection)
+// 11. Execute the Commands of MongoDB and operations in MongoDB : Insert, Query, Update, Delete and Projection.
+
+//// Insert
+
+// Insert: insertOne()
+db.students.insertOne({
+  name: "Tom",
+  mobile: "1234567890",
+  age: 22,
+  gender: "Male",
+  department: "Electrical Engineering",
+  course: "B.Tech",
+  semester: 5,
+  cgpa: 7.9
+});
+
+// Insert: insertMany()
+db.students.insertMany([
+  {
+    name: "Alice",
+    mobile: "9876543210",
+    age: 20,
+    gender: "Female",
+    department: "Computer Science",
+    course: "B.Tech",
+    semester: 4,
+    cgpa: 8.9
+  },
+  {
+    name: "John",
+    mobile: "8765432109",
+    age: 23,
+    gender: "Male",
+    department: "Mechanical Engineering",
+    course: "B.Tech",
+    semester: 7,
+    cgpa: 7.6
+  }
+]);
+
+//// Query
+// Query: findOne() - returns only one object.
+db.students.findOne({ name: "Alice" });
+
+// Query: find()
+db.students.find({ department: "Computer Science" });
+
+//// Update
+// Update: updateOne()
+db.students.updateOne(
+  { name: "Alice" },
+  { $inc: { cgpa: 0.3 } }
+);
+
+// Update: updateMany()
+db.students.updateMany(
+  { department: "Computer Science" },
+  { $inc: { cgpa: -0.2 } }
+);
+
+// Update: replaceOne() - Used to replace the entire object with a new one. It does however maintain the _id field.
+db.students.replaceOne(
+  { name: "Tom" }, 
+  {
+    name: "Tim",
+    mobile: "1122334455",
+    age: 24,
+    gender: "Male",
+    department: "Physics",
+    course: "Ph.D.",
+    semester: 6,
+    cgpa: 8.7
+  },
+  { upsert: true }  // If no matching document is found, insert a new one
+);
+
+//// Delete
+// deleteOne()
+db.students.deleteOne({ name: "Tom" });
+
+// deleteMany()
+db.students.deleteMany({ cgpa: { $lt: 6.5 } });
+
+
+//// Projection
+
+
+
+
+
+
+
+
+
+
 
 
 
