@@ -205,6 +205,102 @@ WHERE rank = 1;
 
 
 
+---- 7. Count the number of depositors living in Nagpur.
+
+SELECT COUNT(DISTINCT d.cname)
+FROM Deposit d
+JOIN Customer c ON d.cname = c.cname
+WHERE c.city = 'Nagpur';
+
+
+---- 8. Give the name of customers in Powai branch having more deposit than all customer VRCE branch.
+
+SELECT cname
+FROM Deposit
+WHERE bname = 'Powai'
+  AND amount > (
+    SELECT SUM(amount)
+    FROM Deposit
+    WHERE bname = 'VRCE'
+  );
+
+
+---- 9. Give names of customers in Karolbagh branch having more deposit than any other in Virar branch.
+
+SELECT cname
+FROM Deposit
+WHERE bname = 'Karolbagh'
+  AND amount > (
+    SELECT MAX(amount)
+    FROM Deposit
+    WHERE bname = 'Virar'
+  );
+
+
+---- 10. Give names of customers having highest deposit in the branch where Sunil is having deposit.
+
+WITH sunil_branch AS (
+  SELECT bname
+  FROM Deposit
+  WHERE cname = 'Sunil'
+),
+max_deposit AS (
+  SELECT MAX(amount) AS max_amt
+  FROM Deposit
+  WHERE bname = (SELECT bname FROM sunil_branch)
+)
+SELECT cname
+FROM Deposit
+WHERE bname = (SELECT bname FROM sunil_branch)
+  AND amount = (SELECT max_amt FROM max_deposit);
+
+
+
+---- 11. Give the highest deposit of the city where branch of Sunil is located.
+
+-- Join
+SELECT MAX(d1.amount) AS highest_deposit
+FROM Deposit d1
+JOIN Branch b1 ON d1.bname = b1.bname
+JOIN Deposit d2 ON d2.cname = 'Sunil'
+JOIN Branch b2 ON d2.bname = b2.bname
+WHERE b1.city = b2.city;
+
+-- CTE
+WITH sunil_city AS (
+  SELECT b.city
+  FROM Deposit d
+  JOIN Branch b ON d.bname = b.bname
+  WHERE d.cname = 'Sunil'
+)
+SELECT MAX(d.amount) AS highest_deposit
+FROM Deposit d
+JOIN Branch b ON d.bname = b.bname
+WHERE b.city = (SELECT city FROM sunil_city);
+
+
+---- 12. Give names of customers having more deposit than the average deposit in their respective branches.
+
+-- CTE
+WITH branch_avg AS (
+  SELECT bname, AVG(amount) AS avg_amt
+  FROM Deposit
+  GROUP BY bname
+)
+SELECT d.cname
+FROM Deposit d
+JOIN branch_avg b ON d.bname = b.bname
+WHERE d.amount > b.avg_amt;
+
+-- Join
+SELECT d1.cname
+FROM Deposit d1
+JOIN (
+  SELECT bname, AVG(amount) AS avg_amt
+  FROM Deposit
+  GROUP BY bname
+) AS avg_table ON d1.bname = avg_table.bname
+WHERE d1.amount > avg_table.avg_amt;
 
 
 
