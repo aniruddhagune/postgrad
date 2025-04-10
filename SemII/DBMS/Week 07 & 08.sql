@@ -222,7 +222,7 @@ DELETE FROM customer;
 
 ---- 15. Delete depositors of branches having number of customer between 1 and 3.
 
-Select * FROM deposit 
+DELETE FROM deposit 
 WHERE bname IN (
     SELECT bname FROM (
         SELECT d.bname
