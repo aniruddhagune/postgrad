@@ -378,7 +378,7 @@ WHERE cname = "Vijay";
 WITH vijayCheck AS 
 (SELECT COUNT(*) AS cnt FROM Deposit WHERE cname = 'Vijay' )
 DELETE FROM Deposit
-WHERE cname = 'Naren'
+WHERE cname = 'Ajay'
   AND (SELECT cnt FROM vijayCheck) = 0;
 
 
