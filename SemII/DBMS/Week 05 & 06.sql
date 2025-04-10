@@ -202,7 +202,25 @@ SELECT bname FROM ranked_branches
 WHERE rank = 1;
 
 
+-- CTE
+WITH branch_counts AS (
+  SELECT bname, COUNT(DISTINCT cname) AS depositor_count
+  FROM Deposit
+  GROUP BY bname
+)
+SELECT bname
+FROM branch_counts
+WHERE depositor_count = (SELECT MAX(depositor_count) FROM branch_counts);
 
+-- 
+SELECT bname
+FROM Deposit
+GROUP BY bname
+HAVING COUNT(DISTINCT cname) >= ALL (
+  SELECT COUNT(DISTINCT cname)
+  FROM Deposit
+  GROUP BY bname
+);
 
 
 ---- 7. Count the number of depositors living in Nagpur.
@@ -302,18 +320,163 @@ JOIN (
 ) AS avg_table ON d1.bname = avg_table.bname
 WHERE d1.amount > avg_table.avg_amt;
 
+---- 13. Give names of customers having maximum deposit among deposits of Nagpur for branch VRCE.
+
+-- JOIN + Subquery
+SELECT d.cname
+FROM Deposit d
+JOIN Customer c ON d.cname = c.cname
+WHERE d.bname = 'VRCE' AND c.city = 'Nagpur'
+  AND d.amount = (
+    SELECT MAX(d2.amount)
+    FROM Deposit d2
+    JOIN Customer c2 ON d2.cname = c2.cname
+    WHERE d2.bname = 'VRCE' AND c2.city = 'Nagpur'
+);
+
+-- CTE
+WITH target_deposits AS (
+  SELECT d.cname, d.amount AS t_amount
+  FROM Deposit d
+  JOIN Customer c ON d.cname = c.cname
+  WHERE d.bname = 'VRCE' AND c.city = 'Nagpur'
+)
+SELECT cname
+FROM target_deposits
+WHERE t_amount = (SELECT MAX(t_amount) FROM target_deposits);
+
+---- 14. Give the name of branch there are less than 2 depositors.
+
+SELECT bname
+FROM Deposit
+GROUP BY bname
+HAVING COUNT(DISTINCT cname) < 2;
+
+---- 15. Give name of the city having more customers living in it than Nagpur.
+
+SELECT city, COUNT(*) AS num_customers
+FROM Customer
+GROUP BY city
+HAVING COUNT(*) > (
+  SELECT COUNT(*)
+  FROM Customer
+  WHERE city = 'Nagpur'
+);
+
+---- 16. Give names of branches having more depositors than borrowers.
+
+SELECT bname
+FROM Deposit
+GROUP BY bname
+HAVING COUNT(DISTINCT cname) > (
+  SELECT COUNT(DISTINCT cname)
+  FROM Borrow
+  WHERE Borrow.bname = Deposit.bname
+);
+
+---- 17. Give the names of customers living in the city where the maximum numbers of depositors are located.
+
+WITH city_counts AS (
+  SELECT c.city, COUNT(DISTINCT d.cname) AS cnt
+  FROM Deposit d
+  JOIN Customer c ON d.cname = c.cname
+  GROUP BY c.city
+),
+max_city AS (
+  SELECT city
+  FROM city_counts
+  WHERE cnt = (SELECT MAX(cnt) FROM city_counts)
+)
+
+SELECT cname
+FROM Customer
+WHERE city IN (SELECT city FROM max_city);
+
+---- 18. Give the name of cities in which the maximum numbers of branches are located.
+
+-- Uses All
+SELECT city
+FROM Branch
+GROUP BY city
+HAVING COUNT(*) >= ALL (
+  SELECT COUNT(*)
+  FROM Branch
+  GROUP BY city
+);
+
+-- Rank Function
+SELECT city
+FROM (
+  SELECT city, DENSE_RANK() OVER (ORDER BY COUNT(*) DESC) AS rnk
+  FROM Branch
+  GROUP BY city
+) AS ranked
+WHERE rnk = 1;
+
+-- Non CTE
+SELECT city
+FROM Branch
+GROUP BY city
+HAVING COUNT(*) = (
+  SELECT MAX(branch_count)
+  FROM (
+    SELECT city, COUNT(*) AS branch_count
+    FROM Branch
+    GROUP BY city
+  ) AS sub
+);
+
+-- CTE
+WITH branch_counts AS (
+  SELECT city, COUNT(*) AS branch_count
+  FROM Branch
+  GROUP BY city
+)
+SELECT city
+FROM branch_counts
+WHERE branch_count = (SELECT MAX(branch_count) FROM branch_counts);
 
 
+---- 19. Give the names of borrowers having the same branch city as highest borrower.
+
+-- Join
+SELECT b1.cname
+FROM Borrow b1
+JOIN Branch br1 ON b1.bname = br1.bname
+JOIN Borrow b2 ON b2.amount = (SELECT MAX(amount) FROM Borrow)
+JOIN Branch br2 ON b2.bname = br2.bname
+WHERE br1.city = br2.city;
+
+-- CTE
+WITH highest_borrower AS (
+  SELECT bname, amount
+  FROM Borrow
+  WHERE amount = (SELECT MAX(amount) FROM Borrow)
+),
+target_city AS (
+  SELECT DISTINCT b.city
+  FROM highest_borrower hb
+  JOIN Branch b ON hb.bname = b.bname
+)
+SELECT l.cname
+FROM Borrow l
+JOIN Branch b ON l.bname = b.bname
+WHERE b.city IN (SELECT city FROM target_city);
 
 
+---- 20. Count the number of customers living in the city where branch is located.
 
+-- What is that phrasing?
+SELECT COUNT(DISTINCT c.cname) AS customer_count
+FROM Customer c
+JOIN Branch b ON c.city = b.city;
 
-
-
-
-
-
-
+-- For customers in the same city as their branch city.
+SELECT COUNT(DISTINCT d.cname) AS matching_customers
+FROM Customer c
+JOIN Deposit d ON d.cname = c.cname
+JOIN Branch b ON d.bname = b.bname
+WHERE c.city = b.city;
 
 
 
